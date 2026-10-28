@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     guardrail: str = Field(default="local", alias="QUERYN_GUARDRAIL")
     tracing: str = Field(default="local", alias="QUERYN_TRACING")
 
+    api_key: str = Field(default="", alias="QUERYN_API_KEY")
+    rate_limit_per_minute: float = Field(default=60.0, alias="QUERYN_RATE_LIMIT_PER_MINUTE")
+
     max_verify_retries: int = Field(default=2, alias="QUERYN_MAX_VERIFY_RETRIES")
     cache_similarity_threshold: float = Field(
         default=0.95, alias="QUERYN_CACHE_SIMILARITY_THRESHOLD"
