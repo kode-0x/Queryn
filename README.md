@@ -194,6 +194,7 @@ queryn/
 ├── uv.lock
 ├── .python-version
 ├── .env.example
+├── LICENSE
 └── README.md
 ```
 
@@ -360,4 +361,4 @@ terraform -chdir=terraform plan
 
 ## License
 
-No license is defined yet. Add an appropriate license before distributing or deploying.
+Released under the MIT License. See [`LICENSE`](LICENSE) for the full text.
