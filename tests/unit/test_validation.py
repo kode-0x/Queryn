@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+from app.graph.state import Claim, Source
 from app.security.validation import (
     InputValidationError,
     OutputIntegrityError,
@@ -44,15 +45,15 @@ def test_output_format_enum_enforced() -> None:
 
 
 def test_output_validation_fails_on_unknown_source_id() -> None:
-    sources = [{"id": "s1", "title": "", "uri": "", "snippet": "", "mock": True}]
-    claims = [{"text": "x", "source_ids": ["s2"]}]
+    sources: list[Source] = [{"id": "s1", "title": "", "uri": "", "snippet": "", "mock": True}]
+    claims: list[Claim] = [{"text": "x", "source_ids": ["s2"]}]
     with pytest.raises(OutputIntegrityError):
         validate_output("report", claims, sources)
 
 
 def test_output_validation_passes_on_known_source_id() -> None:
-    sources = [{"id": "s1", "title": "", "uri": "", "snippet": "", "mock": True}]
-    claims = [{"text": "x", "source_ids": ["s1"]}]
+    sources: list[Source] = [{"id": "s1", "title": "", "uri": "", "snippet": "", "mock": True}]
+    claims: list[Claim] = [{"text": "x", "source_ids": ["s1"]}]
     validate_output("report", claims, sources)
 
 

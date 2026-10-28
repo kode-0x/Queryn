@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+from typing import cast
 
 from app.agents.search import search_node
 from app.agents.summarize import summarize_node
@@ -42,9 +43,9 @@ async def test_normal_pipeline_slice_verifies() -> None:
     writer = functools.partial(writer_node, gateway=MockGateway())
 
     state: ResearchState = {"query": query}
-    state.update(await search(state))
-    state.update(await summarize(state))
-    state.update(await writer(state))
+    state.update(cast(ResearchState, await search(state)))
+    state.update(cast(ResearchState, await summarize(state)))
+    state.update(cast(ResearchState, await writer(state)))
     result = verify_node(state)
 
     assert result["verified"] is True

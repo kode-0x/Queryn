@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
+from typing import Any, cast
 
 import httpx
 import pytest
@@ -88,7 +89,7 @@ async def test_research_evaluate_populates_scores(client: httpx.AsyncClient) -> 
 
 
 async def test_research_pdf_returns_pdf_bytes_when_enabled(client: httpx.AsyncClient) -> None:
-    app = client._transport.app  # type: ignore[attr-defined]
+    app = cast(Any, client._transport).app
     pdf_enabled = bool(app.state.collaborators.modes["pdf_enabled"])
     response = await client.post(
         "/research", json={"topic": "marine biodiversity", "output_format": "pdf"}

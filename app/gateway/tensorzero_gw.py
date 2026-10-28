@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 import tempfile
 from pathlib import Path
+from typing import Any, cast
 
 from app.config import ConfigurationError
 from app.gateway.base import GatewayResult
@@ -48,8 +49,8 @@ class TensorZeroGateway:
     async def complete(self, *, agent: str, system: str, prompt: str) -> GatewayResult:
         if self._client is None:
             self._client = self._build_client()
-        client = self._client
-        response = await client.inference(  # type: ignore[attr-defined]
+        client = cast(Any, self._client)
+        response = await client.inference(
             function_name=_FUNCTION_NAME,
             input={
                 "system": system,

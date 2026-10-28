@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import json
 import logging
+from typing import Any, cast
 
 from app.observability.logging import JsonFormatter, RedactionFilter
 
 
-def _make_record(msg: str, extra_fields: dict | None = None) -> logging.LogRecord:
+def _fields(record: logging.LogRecord) -> dict[str, Any]:
+    return cast(dict[str, Any], cast(Any, record).extra_fields)
+
+
+def _make_record(msg: str, extra_fields: dict[str, Any] | None = None) -> logging.LogRecord:
     record = logging.LogRecord(
         name="queryn.test",
         level=logging.INFO,
@@ -37,7 +42,7 @@ def test_redaction_masks_secret_keyed_fields() -> None:
     )
     flt.filter(record)
 
-    fields = record.extra_fields
+    fields = _fields(record)
     assert fields["openrouter_api_key"] == "[REDACTED]"
     assert fields["database_url"] == "[REDACTED]"
     assert fields["redis_url"] == "[REDACTED]"
@@ -61,8 +66,8 @@ def test_redaction_masks_sk_shaped_values_in_extra() -> None:
     secret = "sk-" + "A1b2C3d4E5f6G7h8I9j0"
     record = _make_record("event", {"note": f"token is {secret}"})
     flt.filter(record)
-    assert secret not in record.extra_fields["note"]
-    assert "[REDACTED]" in record.extra_fields["note"]
+    assert secret not in _fields(record)["note"]
+    assert "[REDACTED]" in _fields(record)["note"]
 
 
 def test_json_formatter_emits_valid_json_with_extra_fields() -> None:

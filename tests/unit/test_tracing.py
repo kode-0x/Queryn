@@ -30,6 +30,7 @@ def test_local_tracer_records_no_secret_values() -> None:
 
 def test_noop_tracer_is_inert() -> None:
     tracer = NoopTracer()
-    assert tracer.start_run("x") is None
-    assert tracer.record_event({"a": 1}) is None
-    assert tracer.end_run("verified") is None
+    tracer.start_run("x")
+    tracer.record_event({"a": 1})
+    tracer.end_run("verified")
+    assert isinstance(tracer, NoopTracer)

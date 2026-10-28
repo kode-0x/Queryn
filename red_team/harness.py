@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 from app.gateway.mock import MockGateway
 from app.security import injection
-from app.security.guardrail_base import Guardrail
+from app.security.guardrail_base import Boundary, Guardrail
 from app.security.guardrail_local import LocalGuardrail
 from red_team.scenarios import SCENARIOS, Scenario
 
@@ -40,7 +40,7 @@ class HarnessReport:
         return all(result.passed for result in self.results)
 
 
-def _run_turn(guardrail: Guardrail, prompt: str, boundary: str) -> TurnResult:
+def _run_turn(guardrail: Guardrail, prompt: str, boundary: Boundary) -> TurnResult:
     scan = injection.scan(prompt, boundary)
     decision = guardrail.check(scan.sanitized, boundary)
     return TurnResult(

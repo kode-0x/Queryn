@@ -5,7 +5,7 @@ import pytest
 from app.security.guardrail_local import LocalGuardrail
 from red_team.harness import HARNESS_LABEL, run_harness, run_scenario
 from red_team.pyrit_runner import pyrit_available
-from red_team.scenarios import SCENARIOS, scenarios_by_family
+from red_team.scenarios import SCENARIOS, Scenario, scenarios_by_family
 
 _FAMILIES = {"jailbreak", "xpia", "crescendo", "skeleton_key"}
 
@@ -30,7 +30,7 @@ def test_harness_blocks_labeled_unsafe_scenarios() -> None:
 
 
 @pytest.mark.parametrize("scenario", SCENARIOS, ids=lambda s: s.id)
-def test_each_scenario_records_config_response_and_outcome(scenario) -> None:  # type: ignore[no-untyped-def]
+def test_each_scenario_records_config_response_and_outcome(scenario: Scenario) -> None:
     result = run_scenario(scenario, LocalGuardrail())
     assert result.config_under_test
     assert result.turns

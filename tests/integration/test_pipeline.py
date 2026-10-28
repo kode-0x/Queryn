@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import functools
+from typing import Any
 
 from langgraph.graph import END, START, StateGraph
 
@@ -43,12 +44,12 @@ async def test_normal_offline_run_terminates_verified_with_attribution() -> None
         assert all(sid in source_ids for sid in claim["source_ids"])
 
 
-def _disjoint_writer_node(state: ResearchState) -> dict:
+def _disjoint_writer_node(state: ResearchState) -> dict[str, Any]:
     claims = [{"text": "zzz qqq", "source_ids": [s["id"]]} for s in state.get("sources", [])]
     return {"draft": "# forced", "claims": claims}
 
 
-def _build_forced_graph(max_retries: int):
+def _build_forced_graph(max_retries: int) -> Any:
     graph: StateGraph = StateGraph(ResearchState)
     graph.add_node("search", functools.partial(search_node, provider=MockSearchProvider()))
     graph.add_node("summarize", functools.partial(summarize_node, gateway=MockGateway()))
